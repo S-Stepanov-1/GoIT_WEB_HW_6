@@ -14,6 +14,9 @@ fake = Faker()
 
 
 def do_filling(connect, sql_code, values):
+    """The function creates a cursor object, inserts data into the database table.
+    Then it commits the changes and close the cursor object"""
+
     cursor = connect.cursor()
     try:
         cursor.executemany(sql_code, values)
@@ -25,11 +28,14 @@ def do_filling(connect, sql_code, values):
 
 
 def seed_groups(connect):
+    """The function prepared SQL code and calls 'do_filling' function"""
     sql_groups = "INSERT INTO groups (name) VALUES (?);"
     do_filling(connect, sql_groups, zip(GROUPS,))
 
 
 def seed_students(connect):
+    """The function prepared SQL code, forms students' list and list of group id.
+     Then it calls 'do_filling' function"""
     students = [fake.name() for _ in range(NUMBER_OF_STUDENTS)]  # generate students' list
     sql_students = "INSERT INTO students (fullname, group_id) VALUES (?, ?);"
     list_group_id = [randint(1, len(GROUPS)) for _ in range(NUMBER_OF_STUDENTS)]
@@ -38,6 +44,7 @@ def seed_students(connect):
 
 
 def seed_teachers(connect):
+    """The function prepared SQL and calls 'do_filling' function"""
     teachers = [fake.name() for _ in range(NUMBER_OF_TEACHERS)]  # generate students' list
     sql_students = "INSERT INTO teachers (fullname) VALUES (?);"
 
@@ -45,6 +52,8 @@ def seed_teachers(connect):
 
 
 def seed_subjects(connect):
+    """The function prepared SQL code and forms teachers' id list.
+         Then it calls 'do_filling' function"""
     list_teacher_id = [randint(1, NUMBER_OF_TEACHERS) for _ in range(len(SUBJECTS))]
     sql_groups = "INSERT INTO subjects (name, teacher_id) VALUES (?, ?);"
 
@@ -52,6 +61,7 @@ def seed_subjects(connect):
 
 
 def get_list_date(start, finish) -> list[date]:
+    """The function return a list with workdays between two dates: start and finish"""
     result = []
     current_day = start
     while current_day < finish:
@@ -63,6 +73,8 @@ def get_list_date(start, finish) -> list[date]:
 
 
 def seed_grades(connect):
+    """The function prepared SQL code, calls the 'get_list_date' function to get the workdays and
+    forms grades list with tuples. Then it calls 'do_filling' function to insert the data into table."""
     start_date = datetime.strptime("2022-09-01", "%Y-%m-%d")
     finish_date = datetime.strptime("2023-05-31", "%Y-%m-%d")
 
@@ -71,9 +83,11 @@ def seed_grades(connect):
 
     grades = []
     for day in list_date:
-        random_subject = randint(1, len(SUBJECTS))
-        random_students = [randint(1, NUMBER_OF_STUDENTS) for _ in range(5)]
+        random_subject = randint(1, len(SUBJECTS))  # choosing a random subject
+
+        random_students = [randint(1, NUMBER_OF_STUDENTS) for _ in range(5)]  # making a list with 5 random students
         for student in random_students:
+            #  append a tuple(student_id, subject, grade, day of the week) to grades
             grades.append((student, random_subject, randint(1, 5), day))
 
     do_filling(connect, sql_grades, grades)
