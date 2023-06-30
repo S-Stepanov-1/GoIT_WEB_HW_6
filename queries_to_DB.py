@@ -6,7 +6,7 @@ def handle_input():
     while True:
         try:
             q_num = int(input("Please enter the query number you want to perform: "))
-            if 1 <= q_num <= 11:
+            if 1 <= q_num <= 11:  # we have only 11 queries to DB in this task
                 return q_num
             else:
                 print("\nThe query number must be from 1 to 11. Try again.\n")
@@ -17,8 +17,8 @@ def handle_input():
 def do_query(curs, sql_query):
     rows = None
     try:
-        curs.execute(sql_query)
-        rows = curs.fetchall()
+        curs.execute(sql_query)  # query to DB
+        rows = curs.fetchall()  # getting data
     except Error as err:
         print(err)
 
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     sql_file = f"SQLite/query_{query_number}.sql"
 
     with open(sql_file, "r") as file:
-        sql_code = file.read()
+        sql_code = file.read()  # reading an SQL code from file in SQLite directory
         print("\n" + sql_code.split("\n")[0])  # The first line in query_X.sql that describes the work of query
 
         with make_connection(database) as connection:
