@@ -1,4 +1,4 @@
--- A list of courses that a particular student is taught by a particular instructor.
+-- A list of courses that a particular student is taught by a particular teacher.
 
 SELECT s.fullname AS student, t.fullname AS teacher, subj.name AS subject
 	FROM grades g

@@ -1,4 +1,4 @@
--- The average score that a particular instructor gives to a particular student !=in each course=!.
+-- The average score that a particular teacher gives to a particular student !=in each course=!.
 
 SELECT s.fullname AS student, t.fullname AS teacher, subj.name AS subject, ROUND(AVG(g.grade), 2)
 	FROM grades g

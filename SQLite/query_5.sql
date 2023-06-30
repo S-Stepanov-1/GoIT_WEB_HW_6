@@ -1,4 +1,4 @@
--- Find what courses a particular instructor is reading
+-- Find what courses a particular teacher is reading
 
 SELECT t.fullname, s.name AS subject
 	FROM teachers t
